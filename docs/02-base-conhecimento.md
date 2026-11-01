@@ -1,55 +1,48 @@
-# Base de Conhecimento
+# Base de Conhecimento — LogiAssist
 
-## Dados Utilizados
+## Objetivo
 
-Descreva se usou os arquivos da pasta `data`, por exemplo:
+Reunir critérios de triagem e orientações iniciais para ocorrências de entrega. A base apoia a análise do profissional e reduz respostas genéricas.
 
-| Arquivo | Formato | Utilização no Agente |
-|---------|---------|---------------------|
-| `historico_atendimento.csv` | CSV | Contextualizar interações anteriores |
-| `perfil_investidor.json` | JSON | Personalizar recomendações |
-| `produtos_financeiros.json` | JSON | Sugerir produtos adequados ao perfil |
-| `transacoes.csv` | CSV | Analisar padrão de gastos do cliente |
+## Dados utilizados
 
-> [!TIP]
-> **Quer um dataset mais robusto?** Você pode utilizar datasets públicos do [Hugging Face](https://huggingface.co/datasets) relacionados a finanças, desde que sejam adequados ao contexto do desafio.
+| Arquivo | Formato | Utilização |
+|---|---|---|
+| `procedimentos_logisticos.json` | JSON | Categorias, informações a verificar, ações sugeridas e limites de resposta |
 
----
+O arquivo reúne sete categorias: atraso, rastreamento sem atualização, tentativa sem sucesso, divergência de status, avaria ou possível extravio, devolução e problema com endereço.
 
-## Adaptações nos Dados
+## Estrutura
 
-> Você modificou ou expandiu os dados mockados? Descreva aqui.
+Cada ocorrência apresenta:
+- **Verificar:** informações necessárias para análise;
+- **Ações:** verificações e próximos passos sugeridos;
+- **Não concluir:** afirmações que não podem ser feitas sem evidência.
 
-[Sua descrição aqui]
+O arquivo também contém regras gerais e uma estrutura padrão de resposta.
 
----
+## Adaptação dos dados
 
-## Estratégia de Integração
+A base temática de logística substitui os exemplos financeiros do repositório original. Os cenários são genéricos e não contêm dados reais de clientes, pedidos ou transportadoras.
 
-### Como os dados são carregados?
-> Descreva como seu agente acessa a base de conhecimento.
+As orientações são referências para o protótipo, não políticas universais. Prazos e regras de reentrega, indenização ou devolução devem ser confirmados nos canais oficiais e procedimentos da empresa.
 
-[ex: Os JSON/CSV são carregados no início da sessão e incluídos no contexto do prompt]
+## Estratégia de integração
 
-### Como os dados são usados no prompt?
-> Os dados vão no system prompt? São consultados dinamicamente?
+A aplicação Python carregará o arquivo JSON. A lógica do agente selecionará as informações relacionadas à ocorrência e as disponibilizará ao modelo junto com as instruções do prompt de sistema.
 
-[Sua descrição aqui]
+O agente deverá responder com base no conteúdo recuperado, pedir dados quando necessário e informar quando a base não oferecer orientação suficiente.
 
----
+## Exemplo de contexto
 
-## Exemplo de Contexto Montado
+**Categoria:** Rastreamento sem atualização
 
-> Mostre um exemplo de como os dados são formatados para o agente.
+**Verificar:** data e hora do último evento, texto exato do status, prazo previsto e canal consultado.
 
-```
-Dados do Cliente:
-- Nome: João Silva
-- Perfil: Moderado
-- Saldo disponível: R$ 5.000
+**Ações:** confirmar o código, consultar o canal oficial, comparar o último evento com o prazo previsto e registrar a tratativa.
 
-Últimas transações:
-- 01/11: Supermercado - R$ 450
-- 03/11: Streaming - R$ 55
-...
-```
+**Limite:** a ausência de atualização não comprova que a encomenda está perdida.
+
+## Confiabilidade e limites
+
+A base não fornece prazos fixos nem confirma eventos em tempo real. O agente deve separar relato, evidência e hipótese, solicitar informações complementares e recomendar validação humana quando necessário.
