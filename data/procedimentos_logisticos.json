@@ -1,0 +1,64 @@
+{
+  "projeto": "LogiAssist",
+  "finalidade": "Apoiar a triagem inicial de ocorrências de entrega.",
+  "regras_gerais": [
+    "Não inventar status, prazos, políticas ou causas.",
+    "Distinguir relato do usuário, evidência e hipótese.",
+    "Consultar o prazo informado no pedido e as regras oficiais aplicáveis.",
+    "Solicitar dados complementares quando faltarem informações.",
+    "Recomendar validação humana antes de decisões operacionais."
+  ],
+  "ocorrencias": [
+    {
+      "codigo": "ATRASO_ENTREGA",
+      "categoria": "Atraso na entrega",
+      "verificar": ["prazo previsto", "data de postagem ou coleta", "último evento e data", "ocorrências registradas"],
+      "acoes": ["Comparar a data atual com o prazo informado.", "Consultar o rastreamento no canal oficial.", "Registrar a consulta e encaminhar conforme procedimento interno."],
+      "nao_concluir": ["Prazo expirado não comprova extravio.", "Não prometer nova data sem confirmação oficial."]
+    },
+    {
+      "codigo": "RASTREAMENTO_SEM_ATUALIZACAO",
+      "categoria": "Rastreamento sem atualização",
+      "verificar": ["data e hora do último evento", "texto exato do status", "prazo previsto", "canal e horário da consulta"],
+      "acoes": ["Confirmar o código de rastreamento.", "Consultar o canal oficial.", "Comparar o último evento com o prazo previsto.", "Registrar e encaminhar se persistir a falta de informação."],
+      "nao_concluir": ["Ausência de atualização não comprova que a encomenda está perdida.", "Não criar prazo para a próxima atualização."]
+    },
+    {
+      "codigo": "TENTATIVA_SEM_SUCESSO",
+      "categoria": "Tentativa de entrega sem sucesso",
+      "verificar": ["texto do evento", "data e hora", "motivo informado", "orientação oficial para nova tentativa ou retirada"],
+      "acoes": ["Consultar o detalhe do evento.", "Conferir os dados do pedido por canal autorizado.", "Verificar a orientação oficial e registrar a tratativa."],
+      "nao_concluir": ["Não presumir ausência do destinatário ou endereço incorreto.", "Não garantir nova tentativa sem confirmação."]
+    },
+    {
+      "codigo": "DIVERGENCIA_STATUS",
+      "categoria": "Divergência de status",
+      "verificar": ["status em cada sistema", "data e hora das atualizações", "pedido e rastreamento", "comprovantes disponíveis"],
+      "acoes": ["Registrar os status exatamente como aparecem.", "Comparar horários e fontes.", "Consultar o canal responsável e manter pendente até haver evidência."],
+      "nao_concluir": ["Não escolher um status como verdadeiro sem verificar a fonte.", "Não confirmar entrega sem evidência."]
+    },
+    {
+      "codigo": "AVARIA_OU_EXTRAVIO",
+      "categoria": "Avaria ou possível extravio",
+      "verificar": ["descrição do problema", "fotos e comprovantes disponíveis", "condição da embalagem", "histórico e protocolos", "procedimento interno aplicável"],
+      "acoes": ["Preservar evidências disponíveis.", "Registrar o relato sem alterar os fatos.", "Consultar procedimento e canal oficial.", "Encaminhar ao responsável."],
+      "nao_concluir": ["Não atribuir responsabilidade sem apuração.", "Não declarar extravio confirmado sem evidência ou retorno oficial."]
+    },
+    {
+      "codigo": "DEVOLUCAO",
+      "categoria": "Devolução",
+      "verificar": ["motivo informado", "status e histórico", "origem da solicitação", "política aplicável", "situação nos sistemas internos"],
+      "acoes": ["Identificar se é retorno, recusa, insucesso ou solicitação do cliente.", "Consultar a política e o fluxo interno.", "Acompanhar retorno físico e sistêmico."],
+      "nao_concluir": ["Evento de devolução não comprova retorno ao estoque.", "Não confirmar reembolso sem consulta ao processo responsável."]
+    },
+    {
+      "codigo": "PROBLEMA_ENDERECO",
+      "categoria": "Problema com endereço",
+      "verificar": ["mensagem da ocorrência", "endereço cadastrado", "complemento e referências", "regras para correção"],
+      "acoes": ["Comparar os dados por canal autorizado.", "Identificar o campo divergente.", "Consultar se a correção é permitida nesta etapa.", "Registrar e encaminhar."],
+      "nao_concluir": ["Não alterar endereço por conta própria.", "Não compartilhar dados pessoais desnecessários.", "Não garantir redirecionamento sem confirmação."]
+    }
+  ],
+  "resposta_padrao": ["classificação provável", "informações identificadas", "dados pendentes", "verificações recomendadas", "próximo passo sugerido"],
+  "sem_informacao": "Informar que a base não contém orientação suficiente e recomendar consulta ao procedimento interno ou responsável."
+}
