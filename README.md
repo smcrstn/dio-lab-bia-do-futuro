@@ -1,149 +1,109 @@
-# 🤖 Agente Financeiro Inteligente com IA Generativa
+# LogiAssist — Assistente Inteligente de Operações Logísticas
 
-## Contexto
+## Visão geral
 
-Os assistentes virtuais no setor financeiro estão evoluindo de simples chatbots reativos para **agentes inteligentes e proativos**. Neste desafio, você vai idealizar e prototipar um agente financeiro que utiliza IA Generativa para:
+O **LogiAssist** é um protótipo de assistente para apoiar a triagem inicial de ocorrências logísticas. A proposta é organizar as informações necessárias para analisar situações como atraso na entrega, rastreamento sem atualização, tentativa de entrega sem sucesso, divergência de status, avaria ou possível extravio, devolução e problemas com endereço.
 
-- **Antecipar necessidades** ao invés de apenas responder perguntas
-- **Personalizar** sugestões com base no contexto de cada cliente
-- **Cocriar soluções** financeiras de forma consultiva
-- **Garantir segurança** e confiabilidade nas respostas (anti-alucinação)
+O projeto foi desenvolvido como parte de um desafio prático de IA generativa, com foco em aplicação logística, uso de uma base de conhecimento estruturada e prevenção de respostas sem evidências.
 
-> [!TIP]
-> Na pasta [`examples/`](./examples/) você encontra referências de implementação para cada etapa deste desafio.
+## Problema que o projeto aborda
 
----
+Ocorrências logísticas podem chegar com informações incompletas, descrições diferentes ou status divergentes entre sistemas. Isso dificulta a triagem e pode levar a conclusões precipitadas.
 
-## O Que Você Deve Entregar
+O LogiAssist propõe um fluxo inicial padronizado para:
+- identificar a categoria da ocorrência;
+- indicar quais informações precisam ser verificadas;
+- apresentar ações recomendadas conforme os procedimentos cadastrados;
+- explicitar o que não deve ser concluído sem evidências;
+- encaminhar situações desconhecidas ou insuficientes para análise humana.
 
-### 1. Documentação do Agente
+## Categorias contempladas
 
-Defina **o que** seu agente faz e **como** ele funciona:
+A base de conhecimento contém sete categorias:
 
-- **Caso de Uso:** Qual problema financeiro ele resolve? (ex: consultoria de investimentos, planejamento de metas, alertas de gastos)
-- **Persona e Tom de Voz:** Como o agente se comporta e se comunica?
-- **Arquitetura:** Fluxo de dados e integração com a base de conhecimento
-- **Segurança:** Como evitar alucinações e garantir respostas confiáveis?
+1. Atraso na entrega
+2. Rastreamento sem atualização
+3. Tentativa de entrega sem sucesso
+4. Divergência de status
+5. Avaria ou possível extravio
+6. Devolução
+7. Problema com endereço
 
-📄 **Template:** [`docs/01-documentacao-agente.md`](./docs/01-documentacao-agente.md)
+## Como funciona o protótipo
 
----
+A implementação funcional foi experimentada no Google Colab com Python.
 
-### 2. Base de Conhecimento
+O fluxo demonstrado é:
+1. Carregar a base de procedimentos em JSON.
+2. Localizar a categoria correspondente na base.
+3. Recuperar informações a verificar, ações recomendadas e restrições.
+4. Identificar dados ausentes ou categorias não cadastradas.
+5. Gerar uma resposta estruturada para apoiar a triagem.
 
-Utilize os **dados mockados** disponíveis na pasta [`data/`](./data/) para alimentar seu agente:
+A versão avaliada utiliza regras determinísticas em Python e a base JSON como fonte de referência. Um modelo local Qwen2.5-0.5B-Instruct também foi experimentado como camada de linguagem, mas apresentou inconsistências em alguns cenários. Por isso, não é utilizado como autoridade para definir status, confirmar extravio ou tomar decisões operacionais.
 
-| Arquivo | Formato | Descrição |
-|---------|---------|-----------|
-| `transacoes.csv` | CSV | Histórico de transações do cliente |
-| `historico_atendimento.csv` | CSV | Histórico de atendimentos anteriores |
-| `perfil_investidor.json` | JSON | Perfil e preferências do cliente |
-| `produtos_financeiros.json` | JSON | Produtos e serviços disponíveis |
+## Segurança e limites
 
-Você pode adaptar ou expandir esses dados conforme seu caso de uso.
+O LogiAssist é um apoio à triagem, não substitui a análise humana nem os canais oficiais das transportadoras e plataformas.
 
-📄 **Template:** [`docs/02-base-conhecimento.md`](./docs/02-base-conhecimento.md)
+O protótipo:
+- não consulta rastreamento em tempo real;
+- não confirma entrega, extravio, avaria ou responsabilidade sem evidências;
+- não inventa prazos, causas, status ou procedimentos;
+- não altera pedidos, endereços ou dados em sistemas externos;
+- não abre chamados nem emite documentos;
+- encaminha categorias desconhecidas e situações sem dados suficientes para análise humana.
 
----
+Dados pessoais devem ser tratados apenas quando necessários e por canais autorizados.
 
-### 3. Prompts do Agente
+## Avaliação realizada
 
-Documente os prompts que definem o comportamento do seu agente:
+Foram executados testes funcionais no protótipo:
 
-- **System Prompt:** Instruções gerais de comportamento e restrições
-- **Exemplos de Interação:** Cenários de uso com entrada e saída esperada
-- **Tratamento de Edge Cases:** Como o agente lida com situações limite
+| Verificação | Resultado |
+|---|---|
+| Categorias cadastradas | 7 |
+| Categorias com estrutura válida | 7 |
+| Cobertura estrutural da base | 100% |
+| Identificação de informações incompletas | Aprovado |
+| Reconhecimento de categoria desconhecida | Aprovado |
+| Geração de respostas para as sete categorias | Verificada |
 
-📄 **Template:** [`docs/03-prompts.md`](./docs/03-prompts.md)
+A cobertura de 100% refere-se à presença dos campos esperados nas sete categorias cadastradas. Não representa precisão, acurácia ou desempenho estatístico de um modelo de IA.
 
----
+Os testes e suas limitações estão descritos em [docs/04-avaliacao-testes.md](./docs/04-avaliacao-testes.md).
 
-### 4. Aplicação Funcional
+## Estrutura do repositório
 
-Desenvolva um **protótipo funcional** do seu agente:
-
-- Chatbot interativo (sugestão: Streamlit, Gradio ou similar)
-- Integração com LLM (via API ou modelo local)
-- Conexão com a base de conhecimento
-
-📁 **Pasta:** [`src/`](./src/)
-
----
-
-### 5. Avaliação e Métricas
-
-Descreva como você avalia a qualidade do seu agente:
-
-**Métricas Sugeridas:**
-- Precisão/assertividade das respostas
-- Taxa de respostas seguras (sem alucinações)
-- Coerência com o perfil do cliente
-
-📄 **Template:** [`docs/04-metricas.md`](./docs/04-metricas.md)
-
----
-
-### 6. Pitch
-
-Grave um **pitch de 3 minutos** (estilo elevador) apresentando:
-
-- Qual problema seu agente resolve?
-- Como ele funciona na prática?
-- Por que essa solução é inovadora?
-
-📄 **Template:** [`docs/05-pitch.md`](./docs/05-pitch.md)
-
----
-
-## Ferramentas Sugeridas
-
-Todas as ferramentas abaixo possuem versões gratuitas:
-
-| Categoria | Ferramentas |
-|-----------|-------------|
-| **LLMs** | [ChatGPT](https://chat.openai.com/), [Copilot](https://copilot.microsoft.com/), [Gemini](https://gemini.google.com/), [Claude](https://claude.ai/), [Ollama](https://ollama.ai/) |
-| **Desenvolvimento** | [Streamlit](https://streamlit.io/), [Gradio](https://www.gradio.app/), [Google Colab](https://colab.research.google.com/) |
-| **Orquestração** | [LangChain](https://www.langchain.com/), [LangFlow](https://www.langflow.org/), [CrewAI](https://www.crewai.com/) |
-| **Diagramas** | [Mermaid](https://mermaid.js.org/), [Draw.io](https://app.diagrams.net/), [Excalidraw](https://excalidraw.com/) |
-
----
-
-## Estrutura do Repositório
-
-```
-📁 lab-agente-financeiro/
-│
-├── 📄 README.md
-│
-├── 📁 data/                          # Dados mockados para o agente
-│   ├── historico_atendimento.csv     # Histórico de atendimentos (CSV)
-│   ├── perfil_investidor.json        # Perfil do cliente (JSON)
-│   ├── produtos_financeiros.json     # Produtos disponíveis (JSON)
-│   └── transacoes.csv                # Histórico de transações (CSV)
-│
-├── 📁 docs/                          # Documentação do projeto
-│   ├── 01-documentacao-agente.md     # Caso de uso e arquitetura
-│   ├── 02-base-conhecimento.md       # Estratégia de dados
-│   ├── 03-prompts.md                 # Engenharia de prompts
-│   ├── 04-metricas.md                # Avaliação e métricas
-│   └── 05-pitch.md                   # Roteiro do pitch
-│
-├── 📁 src/                           # Código da aplicação
-│   └── app.py                        # (exemplo de estrutura)
-│
-├── 📁 assets/                        # Imagens e diagramas
-│   └── ...
-│
-└── 📁 examples/                      # Referências e exemplos
+    .
+    ├── data/
+    │   └── procedimentos_logisticos.json
+    ├── docs/
+    │   ├── 01-documentacao-agente.md
+    │   ├── 02-base-conhecimento.md
+    │   ├── 03-prompts.md
+    │   └── 04-avaliacao-testes.md
+    ├── src/
+    │   └── README.md
     └── README.md
-```
+
+O notebook de experimentação foi salvo no Google Drive com o nome LogiAssist_Projeto_DIO.ipynb. A execução demonstrativa e os testes descritos neste repositório foram realizados no Google Colab.
+
+## Próximas melhorias
+
+- Ampliar os cenários de teste, incluindo entradas ambíguas e contraditórias.
+- Construir um conjunto de casos de referência revisados por profissionais de logística.
+- Medir separadamente a identificação de categoria, a detecção de dados ausentes e a conformidade das respostas.
+- Evoluir a interface de demonstração.
+- Avaliar integrações futuras com fontes oficiais, sempre com autorização e validação humana.
+
+## Documentação
+
+- [Documentação do agente](./docs/01-documentacao-agente.md)
+- [Base de conhecimento](./docs/02-base-conhecimento.md)
+- [Prompts e regras de comportamento](./docs/03-prompts.md)
+- [Avaliação e testes](./docs/04-avaliacao-testes.md)
 
 ---
 
-## Dicas Finais
-
-1. **Comece pelo prompt:** Um bom system prompt é a base de um agente eficaz
-2. **Use os dados mockados:** Eles garantem consistência e evitam problemas com dados sensíveis
-3. **Foque na segurança:** No setor financeiro, evitar alucinações é crítico
-4. **Teste cenários reais:** Simule perguntas que um cliente faria de verdade
-5. **Seja direto no pitch:** 3 minutos passam rápido, vá ao ponto
+**LogiAssist — organização, rastreabilidade e segurança na triagem de ocorrências logísticas.**
