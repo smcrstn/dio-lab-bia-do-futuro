@@ -82,7 +82,8 @@ Os testes e suas limitações estão descritos em [docs/04-avaliacao-testes.md](
     │   ├── 01-documentacao-agente.md
     │   ├── 02-base-conhecimento.md
     │   ├── 03-prompts.md
-    │   └── 04-avaliacao-testes.md
+    │   ├── 04-avaliacao-testes.md
+    │   └── 05-pitch.md
     ├── src/
     │   └── README.md
     └── README.md
@@ -103,6 +104,7 @@ O notebook de experimentação foi salvo no Google Drive com o nome LogiAssist_P
 - [Base de conhecimento](./docs/02-base-conhecimento.md)
 - [Prompts e regras de comportamento](./docs/03-prompts.md)
 - [Avaliação e testes](./docs/04-avaliacao-testes.md)
+- [Roteiro do pitch](./docs/05-pitch.md)
 
 ---
 
